@@ -1,8 +1,10 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import counter from './counter';
+import user from './user';
 
 const store = {
-  counter
+  counter,
+  user
 };
 
 const StoreContext = createContext(store);

@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import useMountedRef from './useMountedRef';
 
 function useSafeDispatch<T = any>(dispatch: (...args: T[]) => void) {

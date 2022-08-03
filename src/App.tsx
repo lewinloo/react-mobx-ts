@@ -1,7 +1,19 @@
-function App() {
-  const [count, setCount] = useState(0);
+import { Suspense, useState } from 'react';
+import { HashRouter } from 'react-router-dom';
+import AppRouter from './router';
 
-  return <div className="App">121</div>;
+function App() {
+  const [s, set] = useState(false);
+  return (
+    <div className="App">
+      <div>{s}</div>
+      <Suspense fallback={<div>loading...</div>}>
+        <HashRouter>
+          <AppRouter />
+        </HashRouter>
+      </Suspense>
+    </div>
+  );
 }
 
 export default observer(App);
