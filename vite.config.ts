@@ -1,9 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import AutoImport from 'unplugin-auto-import/vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import injectExternals from 'vite-plugin-inject-externals';
-import Inspect from 'vite-plugin-inspect';
+import vitePluginImp from 'vite-plugin-imp';
 import path from 'path';
 
 // https://vitejs.dev/config/
@@ -14,55 +12,32 @@ export default defineConfig(({ mode }) => {
     ? [
         createHtmlPlugin({
           minify: true
-        }),
-        injectExternals.default({
-          command: 'build',
-          modules: [
-            {
-              name: 'react',
-              global: 'React',
-              path: 'https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js'
-            },
-            {
-              name: 'react-dom',
-              global: 'ReactDOM',
-              path: 'https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js'
-            },
-            {
-              name: 'react-router-dom',
-              global: 'ReactRouterDOM',
-              path: 'https://cdn.bootcdn.net/ajax/libs/react-router-dom/6.3.0/react-router-dom.production.min.js'
-            },
-            {
-              name: 'ahooks',
-              global: 'ahooks',
-              path: 'https://cdn.jsdelivr.net/npm/ahooks@3.6.2/dist/ahooks.js'
-            }
-          ]
         })
       ]
     : [];
   return {
     plugins: [
       react(),
-      AutoImport({
-        include: [/\.[t]sx?$/],
-        imports: ['ahooks', 'mobx-react-lite', 'mobx'],
-        dts: './src/auto-imports.d.ts'
+      vitePluginImp({
+        libList: [
+          {
+            libName: 'antd',
+            style: (name) => `antd/es/${name}/style`
+          }
+        ]
       }),
-      Inspect(),
       ...prodPlugins
     ],
     resolve: {
-      alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }]
+      alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+      extensions: ['.js', '.ts', '.tsx', '.json']
     },
     css: {
       preprocessorOptions: {
-        less: {}
+        less: {
+          javascriptEnabled: true
+        }
       }
-    },
-    esbuild: {
-      jsxInject: "import React from 'react';"
     },
     server: {
       host: 'localhost',
@@ -85,7 +60,18 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         output: {
-          // manualChunks: {}
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              return id
+                .toString()
+                .split('node_modules/')[2]
+                .split('/')[0]
+                .toString();
+            }
+          },
+          entryFileNames: 'js/[name].[hash].js',
+          chunkFileNames: 'js/[name].[hash].js',
+          assetFileNames: '[ext]/[name].[hash].[ext]'
         }
       },
       minify: 'terser',

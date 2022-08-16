@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { configure } from 'mobx';
 import { configurePersistable } from 'mobx-persist-store';
 import App from './App';
-import '@/assets/styles/index.scss';
+import '@/assets/styles/index.less';
 
 // config mobx
 configure({ enforceActions: 'observed' });

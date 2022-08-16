@@ -1,3 +1,5 @@
+import { makeAutoObservable } from 'mobx';
+
 class Counter {
   constructor() {
     makeAutoObservable(this);

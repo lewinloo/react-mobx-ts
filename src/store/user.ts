@@ -1,4 +1,5 @@
 import { clearStorage, getToken } from '@/utils/storage';
+import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
 class User {

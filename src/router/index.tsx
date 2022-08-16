@@ -1,8 +1,9 @@
 import { FC, useEffect } from 'react';
-import routes from './routes';
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { IRoute } from '@/typings';
 import useStores from '@/store';
+import { observer } from 'mobx-react-lite';
+import routes from './routes';
 
 // 路由装饰器
 const RouteDecorator = observer((props: { route: IRoute }) => {

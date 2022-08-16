@@ -1,4 +1,4 @@
-@use './mixins.scss' as *;
+@import './mixins.less';
 
 html,
 body {
@@ -39,15 +39,4 @@ a:active {
 
 div:focus {
   outline: none;
-}
-
-.clearfix {
-  &::after {
-    display: block;
-    height: 0;
-    clear: both;
-    font-size: 0;
-    visibility: hidden;
-    content: ' ';
-  }
 }
